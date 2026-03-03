@@ -28,10 +28,108 @@ class Linked_List
   end
 
   def size
-    # Thinking...
+    if @head == nil
+      return 0
+    else
+      result = 1
+      result += pass_forward(@head)
+    end
+    return result
   end
 
-end
+  def pass_forward(node)
+    result = 0
+    if node.next_node == nil
+      return 0
+    else
+      result += pass_forward(node.next_node)
+    end
+    return result
+  end
 
-# Я могу хранить первую ноду в @head, а все последующие в @next самой ноды, создавая цепочку. Так и работает Linked list,
-# Не нужны массивы и хэши
+  def head
+    return nil if @head == nil
+    return @head.value
+  end
+
+  def tail
+    return nil if @tail == nil
+    return @tail.value
+  end
+
+  def at(index)
+    return nil if @head == nil
+    result = 0
+    abort = false
+    current = @head
+    until index < 0 || abort
+      result = current.value
+      abort = true if current.next_node == nil && index != 0
+      current = current.next_node
+      index -= 1
+    end
+    return nil if abort
+    result
+  end
+
+  def pop
+    return nil if @head == nil
+    result = @head.value
+    @head = @head.next_node
+    result
+  end
+
+  def contains?(value)
+    return nil if @head == nil
+    result = nil
+    current = @head
+    while result == nil
+      if current.value == value
+        result = true
+      elsif current.next_node == nil
+        result = false
+      end
+      current = current.next_node
+    end
+    result
+  end
+
+  def index(value)
+    return nil if @head == nil
+    current_index = 0
+    result = nil
+    current_node = @head
+    abort = false
+    until abort
+      if current_node.value == value
+        abort = true
+        result = current_index
+      elsif current_node.next_node == nil
+        abort = true
+      else
+        current_node = current_node.next_node
+      end
+      current_index += 1
+    end
+    result
+  end
+
+  def to_s
+    puts "" if @head == nil
+    array_of_values = Array.new
+    current = @head
+    abort = false
+    until abort
+      array_of_values << current.value
+      if current.next_node
+        current = current.next_node
+      else
+        abort = true
+      end
+    end
+
+    array_of_string_values = Array.new
+    array_of_values.each {|value| array_of_string_values << "( #{value} )"}
+    return array_of_string_values.join(" -> ")
+  end
+end
