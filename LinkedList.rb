@@ -28,23 +28,14 @@ class Linked_List
   end
 
   def size
-    if @head == nil
-      return 0
-    else
-      result = 1
-      result += pass_forward(@head)
-    end
-    return result
-  end
-
-  def pass_forward(node)
-    result = 0
-    if node.next_node == nil
-      return 0
-    else
-      result += pass_forward(node.next_node)
-    end
-    return result
+    return nil if @head == nil
+    counter = 1
+    current = @head
+    until current.next_node == nil
+      counter += 1
+      current = current.next_node
+    end 
+    counter
   end
 
   def head
@@ -115,7 +106,7 @@ class Linked_List
   end
 
   def to_s
-    puts "" if @head == nil
+    return "" if @head == nil
     array_of_values = Array.new
     current = @head
     abort = false
@@ -132,4 +123,30 @@ class Linked_List
     array_of_values.each {|value| array_of_string_values << "( #{value} )"}
     return array_of_string_values.join(" -> ")
   end
+
+  def insert_at(index, *values)
+    left_node = @head
+    until index == 1
+      raise IndexError, "Index out of bounds" if left_node == nil
+      left_node = left_node.next_node
+      index -= 1
+    end
+    right_node = left_node.next_node
+    values.each do |value|
+      left_node.next_node = Node.new(value, right_node)
+      left_node = left_node.next_node
+    end
+  end
+
+  def remove_at(index)
+    current = @head
+    until index == 1
+      raise IndexError, "Index out of bounds" if current == nil
+      left_node = current if index == 2
+      current = current.next_node
+      index -= 1
+    end
+    left_node.next_node = current.next_node
+  end
+
 end
