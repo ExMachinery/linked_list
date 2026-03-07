@@ -126,11 +126,19 @@ class Linked_List
 
   def insert_at(index, *values)
     left_node = @head
-    until index == 1
-      raise IndexError, "Index out of bounds" if left_node == nil
-      left_node = left_node.next_node
-      index -= 1
+    if index == 0
+      new_node = Node.new(values[0], @head)
+      @head = new_node
+      values.delete_at(0)
+      left_node = @head.next_node
+    else
+      until index == 1
+        raise IndexError, "Index out of bounds" if left_node == nil
+        left_node = left_node.next_node
+        index -= 1
+      end
     end
+
     right_node = left_node.next_node
     values.each do |value|
       left_node.next_node = Node.new(value, right_node)
@@ -140,13 +148,19 @@ class Linked_List
 
   def remove_at(index)
     current = @head
-    until index == 1
-      raise IndexError, "Index out of bounds" if current == nil
-      left_node = current if index == 2
-      current = current.next_node
-      index -= 1
+    if index == 0
+      result = @head.value
+      @head = current.next_node
+    else
+      until index == 1
+        raise IndexError, "Index out of bounds" if current == nil
+        left_node = current if index == 2
+        current = current.next_node
+        index -= 1
+      end
+      result = current.value
+      left_node.next_node = current.next_node
     end
-    left_node.next_node = current.next_node
+    result
   end
-
 end
